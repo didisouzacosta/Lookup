@@ -28,12 +28,13 @@ TODO: Add long description of the pod here.
   s.source           = { :git => 'https://github.com/didisouzacosta/Lookup.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '10.3'
 
   s.source_files = 'Lookup/Classes/**/*'
+  s.resources = 'Lookup/Assets/**/*'
   
   # s.resource_bundles = {
-  #   'Lookup' => ['Lookup/Assets/*.png']
+  #   'Lookup' => ['Lookup/Assets/**/*']
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'

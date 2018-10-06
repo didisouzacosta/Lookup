@@ -1,0 +1,6 @@
+framework module Lookup {
+  umbrella header "Lookup-umbrella.h"
+
+  export *
+  module * { export * }
+}

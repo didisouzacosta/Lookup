@@ -7,18 +7,36 @@
 //
 
 import UIKit
+import Lookup
 
 class ViewController: UIViewController {
 
+    private var lookupController: LookupController<String> {
+        let lookupSearch = LookupSearch(term: "a")
+        let lookup = LookupController<String>(lookupSearch: lookupSearch) { search, searchResult in
+            let results = ["Adriano", "Jenifer", "Cida", "Dario", "Getúlio", "Martha"]
+            let filtered = search.term != nil ? results.filter { $0.contains(search.term ?? "") } : results
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                searchResult(LookupSearchResult.success(filtered))
+            }
+        }
+        lookup.didSelectedItemHandler = { item in
+            print(item)
+        }
+        return lookup
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    private func showSearch() {
+        show(lookupController, sender: nil)
+    }
+    
+    @IBAction private func performLookup() {
+        showSearch()
     }
 
 }
-
