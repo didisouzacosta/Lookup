@@ -9,13 +9,20 @@
 import Foundation
 import UIKit
 
-public class LookupController<T: LookupItem>: UITableViewController {
+public class LookupController<T: LookupItem>: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate {
     
     public typealias SearchHandler = (_ search: LookupSearcheable, @escaping (_ result: LookupSearchResult<T>) -> Void) -> Void
     
     // MARK: - Public Variables
     
     public var didSelectedItemHandler: ((T) -> Void)?
+    public var hidesSearchBarWhenScrolling: Bool = false
+    public var obscuresBackgroundDuringPresentation: Bool = false
+    
+    public var searcheable: Bool {
+        get { return viewModel.searcheable }
+        set { viewModel.searcheable = newValue }
+    }
     
     public var offsetFromLoad: Int {
         get { return viewModel.offsetFromLoad }
@@ -29,6 +36,12 @@ public class LookupController<T: LookupItem>: UITableViewController {
     
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = obscuresBackgroundDuringPresentation
+        searchController.searchBar.placeholder = viewModel.lookupSearch.placeholder
+        searchController.searchBar.scopeButtonTitles = viewModel.lookupSearch.scopes
+        searchController.searchBar.selectedScopeButtonIndex = viewModel.lookupSearch.selectedScope ?? 0
+        searchController.searchBar.delegate = self
         return searchController
     }()
     
@@ -60,7 +73,8 @@ public class LookupController<T: LookupItem>: UITableViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
+        setupTableView()
+        setupSearch()
         viewModel.load(page: 1)
     }
     
@@ -85,12 +99,35 @@ public class LookupController<T: LookupItem>: UITableViewController {
         didSelectedItemHandler?(viewModel.item(for: indexPath))
     }
     
+    public func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        viewModel.search(with: searchBar.text ?? "", scopeIndex: searchBar.selectedScopeButtonIndex)
+    }
+    
+    public func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        viewModel.search(with: searchBar.text ?? "", scopeIndex: selectedScope)
+    }
+    
     // MARK: - Private Methods
     
-    private func setup() {
+    private func setupTableView() {
         tableView.register(LookupDefaultCell.lookupCellNib, forCellReuseIdentifier: LookupDefaultCell.lookupCellIdentifier)
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
+    }
+    
+    private func setupSearch() {
+        if #available(iOS 11.0, *) {
+            if navigationController?.navigationItem != nil {
+                navigationItem.searchController = searchController
+                navigationItem.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
+                definesPresentationContext = true
+            } else {
+                tableView.tableHeaderView = searchController.searchBar
+            }
+        } else {
+            tableView.tableHeaderView = searchController.searchBar
+        }
     }
     
 }

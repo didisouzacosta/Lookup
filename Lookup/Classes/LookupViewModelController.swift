@@ -14,13 +14,17 @@ final class LookupViewModelController<T: LookupItem> {
     
     // MARK: - Public Variables
     
-    var offsetFromLoad: Int = 10 {
-        didSet { load(page: 1) }
-    }
+    public var searcheable: Bool = true
+    
+    private(set) var lookupSearch: LookupSearcheable
     
     private(set) var items: Dynamic<[T]> = Dynamic<[T]>([])
     private(set) var isLoading: Dynamic<Bool> = Dynamic<Bool>(false)
     private(set) var error: Dynamic<Error?> = Dynamic<Error?>(nil)
+    
+    var offsetFromLoad: Int = 10 {
+        didSet { load(page: 1) }
+    }
     
     var numberOfSections: Int {
         return 1
@@ -32,7 +36,6 @@ final class LookupViewModelController<T: LookupItem> {
     
     // MARK: - Private Variables
     
-    private var lookupSearch: LookupSearcheable
     private var searchHandler: SearchHandler
     
     private var currentPage: Int = 0 {
@@ -48,14 +51,20 @@ final class LookupViewModelController<T: LookupItem> {
     
     // MARK: - Public Methods
     
+    func search(with term: String = "", scopeIndex: Int? = nil) {
+        lookupSearch.term = term
+        lookupSearch.selectedScope = scopeIndex
+        load(page: 1)
+    }
+    
     func item(for indexPath: IndexPath) -> T {
         return items.value[indexPath.row]
     }
     
     func load(page: Int) {
-        guard page != currentPage, !isLoading.value else { return }
+        guard !isLoading.value else { return }
         
-        currentPage = page
+        lookupSearch.page = page
         error.value = nil
         
         if page == 1 {

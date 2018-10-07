@@ -12,14 +12,11 @@ import Lookup
 class ViewController: UIViewController {
 
     private var lookupController: LookupController<String> {
-        let lookupSearch = LookupSearch(term: "a")
+        let lookupSearch = LookupSearch(scopes: ["Nome", "Apelido"], selectedScope: 1, placeholder: "sdfsdf")
         let lookup = LookupController<String>(lookupSearch: lookupSearch) { search, searchResult in
-            let results = ["Adriano", "Jenifer", "Cida", "Dario", "Getúlio", "Martha"]
-            let filtered = search.term != nil ? results.filter { $0.contains(search.term ?? "") } : results
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                searchResult(LookupSearchResult.success(filtered))
-            }
+            let results = ["Adriano", "Adriano", "Jenifer", "Cida", "Dario", "Getúlio", "Martha"]
+            let filtered = !search.term.isEmpty ? results.filter { $0.lowercased().contains(search.term.lowercased()) } : results
+            searchResult(.success(filtered))
         }
         lookup.didSelectedItemHandler = { item in
             print(item)

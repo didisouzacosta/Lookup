@@ -10,9 +10,10 @@ public protocol LookupSearcheable {
     
     var page: Int { get set }
     var limit: Int { get set }
-    var term: String? { get set }
+    var term: String { get set }
     var scopes: [String] { get set }
     var selectedScope: Int? { get set }
+    var placeholder: String? { get }
     
 }
 
@@ -23,6 +24,10 @@ extension LookupSearcheable {
     }
     
     public var selectedScope: Int? {
+        return nil
+    }
+    
+    var placeholder: String? {
         return nil
     }
     
