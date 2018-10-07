@@ -12,7 +12,7 @@ import Lookup
 class ViewController: UIViewController {
 
     private var lookupController: LookupController<String> {
-        let lookupSearch = LookupSearch(scopes: ["Nome", "Apelido"], selectedScope: 1, placeholder: "sdfsdf")
+        let lookupSearch = LookupSearch(scopes: ["Nome", "Apelido"], selectedScope: 1, placeholder: "Pesquisar")
         let lookup = LookupController<String>(lookupSearch: lookupSearch) { search, searchResult in
             let results = ["Adriano", "Adriano", "Jenifer", "Cida", "Dario", "Getúlio", "Martha"]
             let filtered = !search.term.isEmpty ? results.filter { $0.lowercased().contains(search.term.lowercased()) } : results

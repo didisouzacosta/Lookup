@@ -51,40 +51,45 @@ final class LookupViewModelController<T: LookupItem> {
     
     // MARK: - Public Methods
     
-    func search(with term: String = "", scopeIndex: Int? = nil) {
+    func search(with page: Int = 1, term: String = "", scopeIndex: Int? = nil) {
+        lookupSearch.page = page
         lookupSearch.term = term
         lookupSearch.selectedScope = scopeIndex
-        load(page: 1)
+        load()
     }
     
     func item(for indexPath: IndexPath) -> T {
         return items.value[indexPath.row]
     }
     
-    func load(page: Int) {
-        guard !isLoading.value else { return }
+    // MARK: - Private Methods
+    
+    private func load() {
+        let currentPage = lookupSearch.page
+        let currentTerm = lookupSearch.term
+        let currentScope = lookupSearch.selectedScope
         
-        lookupSearch.page = page
         error.value = nil
+        isLoading.value = true
         
-        if page == 1 {
+        if currentPage == 1 {
             items.value = []
         }
         
-        isLoading.value = true
-        
         searchHandler(lookupSearch) { [weak self] response in
+            guard self?.lookupSearch.page == currentPage,
+                self?.lookupSearch.term == currentTerm,
+                self?.lookupSearch.selectedScope == currentScope else { return }
+            
+            self?.isLoading.value = false
+            
             switch response {
             case .success(let items):
                 self?.items.value += items
             case .failure(let error):
                 self?.error.value = error
             }
-            
-            self?.isLoading.value = false
         }
     }
-    
-    // MARK: - Private Methods
     
 }
