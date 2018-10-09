@@ -8,6 +8,6 @@
 import Foundation
 
 public enum ItemIdentifierCellType {
-    case custom(LookupItemIdentifiable)
+    case custom(LookupCellIdentifiable)
     case `default`
 }

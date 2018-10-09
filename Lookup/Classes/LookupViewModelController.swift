@@ -10,7 +10,7 @@ import Foundation
 
 final class LookupViewModelController<T: LookupItem> {
     
-    typealias SearchHandler = (_ search: LookupSearcheable, @escaping (_ result: LookupSearchResult<T>) -> Void) -> Void
+    typealias SearchHandler = (_ search: LookupSearcheable, @escaping (_ dataSource: LookupSearchResult<T>) -> Void) -> Void
     
     // MARK: - Public Variables
     
@@ -34,7 +34,7 @@ final class LookupViewModelController<T: LookupItem> {
         return items.value.count
     }
     
-    var defaultIdentifier: LookupItemIdentifiable {
+    var defaultIdentifier: LookupCellIdentifiable {
         return LookupDefaultCellIdentifier()
     }
     

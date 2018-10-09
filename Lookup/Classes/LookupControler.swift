@@ -12,7 +12,7 @@ import UIKit
 public class LookupController<T: LookupItem>: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate {
     
     public typealias LookupItemCell = LookupItemCellRepresentable & UITableViewCell
-    public typealias SearchHandler = (_ search: LookupSearcheable, @escaping (_ result: LookupSearchResult<T>) -> Void) -> Void
+    public typealias SearchHandler = (_ search: LookupSearcheable, @escaping (_ dataSource: LookupSearchResult<T>) -> Void) -> Void
     
     // MARK: - Public Variables
     
@@ -133,7 +133,7 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
         }
     }
     
-    private func lookupItemIdentifier(from indexPath: IndexPath) -> LookupItemIdentifiable {
+    private func lookupItemIdentifier(from indexPath: IndexPath) -> LookupCellIdentifiable {
         guard let itemType = cellIdentifierForRowHandler?(indexPath, viewModel.item(for: indexPath)) else {
             return viewModel.defaultIdentifier
         }

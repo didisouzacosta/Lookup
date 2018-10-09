@@ -7,20 +7,36 @@
 
 import Foundation
 
-public protocol LookupItemIdentifiable {
+public protocol LookupCellIdentifiable {
     var identifier: String { get }
     var nibName: String { get }
     var bundle: Bundle { get }
 }
 
-extension LookupItemIdentifiable {
+extension LookupCellIdentifiable {
     
     public var bundle: Bundle {
         return Bundle.main
     }
     
+    var nibName: String {
+        return identifier
+    }
+    
     var nib: UINib {
         return UINib(nibName: nibName, bundle: bundle)
+    }
+    
+}
+
+extension String: LookupCellIdentifiable {
+    
+    public var identifier: String {
+        return self
+    }
+    
+    public var nibName: String {
+        return self
     }
     
 }

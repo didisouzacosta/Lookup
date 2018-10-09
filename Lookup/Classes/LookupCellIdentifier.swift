@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public struct LookupCellIdentifier: LookupItemIdentifiable {
+public struct LookupCellIdentifier: LookupCellIdentifiable {
     
     public var identifier: String
     public var nibName: String

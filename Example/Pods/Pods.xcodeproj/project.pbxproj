@@ -23,8 +23,8 @@
 		A259B637445ABB0B8480B554CBB9F187 /* LookupDefaultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BFD10C7CA90783FE8832BCF886699F0 /* LookupDefaultCell.swift */; };
 		A72377FFB16DDBA5B6C43617EC1682D4 /* LookupItemCellRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72465E6A7B6CD62507851239324FE25C /* LookupItemCellRepresentable.swift */; };
 		A8315AAFB190FE095A9270B73E69F194 /* LookupDefaultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AB327C3423C9C3DDD991013F3A1263C4 /* LookupDefaultCell.xib */; };
+		A92903E8216CD2EE00936873 /* LookupItemIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92903E7216CD2EE00936873 /* LookupItemIdentifiable.swift */; };
 		A94BFC1D216C44C30066BFC6 /* ItemIdentifierCellType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94BFC1C216C44C30066BFC6 /* ItemIdentifierCellType.swift */; };
-		B923CB42DE41D2E8A98CAA6D048563A4 /* LookupItemIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89EFA972AF14DFA73B1AD7A42344E53 /* LookupItemIdentifiable.swift */; };
 		B95EA3FC49800BDC52CF922D0C06E5C3 /* LookupSearcheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EAE7A7CD5CBCE3C7FE1115A7529D02 /* LookupSearcheable.swift */; };
 		BB4BEDC7A7144CA3B04BFF1D40CAA010 /* LookupDefaultCellIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F092006D4B03EE9501E044614F9650BE /* LookupDefaultCellIdentifier.swift */; };
 		C3958F4180CB19D9891085F5040AB44F /* Pods-Lookup_ExampleTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 335641EAA54369772E4E390DEE101316 /* Pods-Lookup_ExampleTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -75,7 +75,7 @@
 		9311E4F64231F29BD3887D80DC49AE64 /* Pods-Lookup_ExampleTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Lookup_ExampleTests.modulemap"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9F523F12DCEA46D46AF2BF70BDE00D95 /* Pods_Lookup_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Lookup_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A89EFA972AF14DFA73B1AD7A42344E53 /* LookupItemIdentifiable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LookupItemIdentifiable.swift; path = Lookup/Classes/LookupItemIdentifiable.swift; sourceTree = "<group>"; };
+		A92903E7216CD2EE00936873 /* LookupItemIdentifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LookupItemIdentifiable.swift; path = Lookup/Classes/LookupItemIdentifiable.swift; sourceTree = "<group>"; };
 		A94BFC1C216C44C30066BFC6 /* ItemIdentifierCellType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ItemIdentifierCellType.swift; path = Lookup/Classes/ItemIdentifierCellType.swift; sourceTree = "<group>"; };
 		AB327C3423C9C3DDD991013F3A1263C4 /* LookupDefaultCell.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = LookupDefaultCell.xib; path = Lookup/Assets/LookupDefaultCell.xib; sourceTree = "<group>"; };
 		AD74576C562C58881715F41951577E37 /* Pods-Lookup_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Lookup_Example-dummy.m"; sourceTree = "<group>"; };
@@ -131,13 +131,13 @@
 		4E4CDD25B58CD16478D06CEA1BED52A7 /* Lookup */ = {
 			isa = PBXGroup;
 			children = (
+				A92903E7216CD2EE00936873 /* LookupItemIdentifiable.swift */,
 				20E8EB58CC80FF69F8FCC72EA3C6B557 /* Dynamic.swift */,
 				B0EE7646B92855F5311EB4E598231222 /* LookupControler.swift */,
 				7BFD10C7CA90783FE8832BCF886699F0 /* LookupDefaultCell.swift */,
 				0B8934B548384B289E9E48EF91EE20E0 /* LookupItem.swift */,
 				72465E6A7B6CD62507851239324FE25C /* LookupItemCellRepresentable.swift */,
 				F092006D4B03EE9501E044614F9650BE /* LookupDefaultCellIdentifier.swift */,
-				A89EFA972AF14DFA73B1AD7A42344E53 /* LookupItemIdentifiable.swift */,
 				8E950DF0473B374535F8303772E1337A /* LookupCellIdentifier.swift */,
 				BF49156FCF861B17132AFB97D5FFCFAC /* LookupSearch.swift */,
 				05EAE7A7CD5CBCE3C7FE1115A7529D02 /* LookupSearcheable.swift */,
@@ -421,9 +421,9 @@
 				E936EF6F0B4A3C44D65B97E8659E0844 /* LookupControler.swift in Sources */,
 				A259B637445ABB0B8480B554CBB9F187 /* LookupDefaultCell.swift in Sources */,
 				81FAF27D1B0AFABFC56253382608021F /* LookupItem.swift in Sources */,
+				A92903E8216CD2EE00936873 /* LookupItemIdentifiable.swift in Sources */,
 				A72377FFB16DDBA5B6C43617EC1682D4 /* LookupItemCellRepresentable.swift in Sources */,
 				BB4BEDC7A7144CA3B04BFF1D40CAA010 /* LookupDefaultCellIdentifier.swift in Sources */,
-				B923CB42DE41D2E8A98CAA6D048563A4 /* LookupItemIdentifiable.swift in Sources */,
 				7B135E4147AF9889EF4A229203E8E482 /* LookupCellIdentifier.swift in Sources */,
 				2ADAE7464487BC77DDB09B46610BE77D /* LookupSearch.swift in Sources */,
 				B95EA3FC49800BDC52CF922D0C06E5C3 /* LookupSearcheable.swift in Sources */,

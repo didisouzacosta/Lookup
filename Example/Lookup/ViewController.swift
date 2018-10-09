@@ -13,18 +13,18 @@ class ViewController: UIViewController {
 
     private var lookupController: LookupController<String> {
         let lookupSearch = LookupSearch(scopes: ["Nome", "Apelido"], selectedScope: 1, placeholder: "Pesquisar")
-        let lookup = LookupController<String>(lookupSearch: lookupSearch) { search, searchResult in
+        let lookup = LookupController<String>(lookupSearch: lookupSearch) { search, dataSource in
             let results = ["Adriano", "Adriano", "Jenifer", "Cida", "Dario", "Getúlio", "Martha"]
             let filtered = !search.term.isEmpty ? results.filter { $0.lowercased().contains(search.term.lowercased()) } : results
-            searchResult(.success(filtered))
+            dataSource(.success(filtered))
         }
-//        lookup.cellIdentifierForRowHandler = { indexPath, item in
-//            if (indexPath.row % 3) == 0 {
-//                return .custom(LookupCellIdentifier("TestCell"))
-//            } else {
-//                return .default
-//            }
-//        }
+        lookup.cellIdentifierForRowHandler = { indexPath, item in
+            if (indexPath.row % 3) == 0 {
+                return .custom("TestCell")
+            } else {
+                return .default
+            }
+        }
         lookup.didSelectItemHandler = { item in
             print(item)
         }

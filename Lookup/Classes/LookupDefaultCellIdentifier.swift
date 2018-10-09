@@ -7,13 +7,9 @@
 
 import Foundation
 
-class LookupDefaultCellIdentifier: LookupItemIdentifiable {
+class LookupDefaultCellIdentifier: LookupCellIdentifiable {
     
     var identifier: String {
-        return "LookupDefaultCell"
-    }
-    
-    var nibName: String {
         return "LookupDefaultCell"
     }
     
