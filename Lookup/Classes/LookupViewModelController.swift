@@ -22,8 +22,10 @@ final class LookupViewModelController<T: LookupItem> {
     private(set) var isLoading: Dynamic<Bool> = Dynamic<Bool>(false)
     private(set) var error: Dynamic<Error?> = Dynamic<Error?>(nil)
     
-    var offsetFromLoad: Int = 10 {
-        didSet { load(page: 1) }
+    var registeredCells: [LookupItemIdentifiable] = []
+    
+    var offset: Int {
+        return lookupSearch.offset
     }
     
     var numberOfSections: Int {
@@ -51,11 +53,11 @@ final class LookupViewModelController<T: LookupItem> {
     
     // MARK: - Public Methods
     
-    func search(with page: Int = 1, term: String = "", scopeIndex: Int? = nil) {
+    func fetch(with page: Int = 1, term: String = "", scopeIndex: Int? = nil) {
         lookupSearch.page = page
         lookupSearch.term = term
         lookupSearch.selectedScope = scopeIndex
-        load()
+        fetch()
     }
     
     func item(for indexPath: IndexPath) -> T {
@@ -64,7 +66,7 @@ final class LookupViewModelController<T: LookupItem> {
     
     // MARK: - Private Methods
     
-    private func load() {
+    private func fetch() {
         let currentPage = lookupSearch.page
         let currentTerm = lookupSearch.term
         let currentScope = lookupSearch.selectedScope

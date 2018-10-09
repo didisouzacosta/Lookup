@@ -18,7 +18,7 @@ class ViewController: UIViewController {
             let filtered = !search.term.isEmpty ? results.filter { $0.lowercased().contains(search.term.lowercased()) } : results
             searchResult(.success(filtered))
         }
-        lookup.didSelectedItemHandler = { item in
+        lookup.didSelectItemHandler = { item in
             print(item)
         }
         return lookup

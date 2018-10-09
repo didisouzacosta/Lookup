@@ -8,19 +8,11 @@
 import Foundation
 import UIKit
 
-public class LookupDefaultCell: UITableViewCell, LookupItemCell {
+public class LookupDefaultCell: UITableViewCell, LookupItemCellRepresentable {
     
     @IBOutlet private var titleLabel: UILabel?
     
-    public static var lookupCellIdentifier: String {
-        return "LookupDefaultCell"
-    }
-    
-    public static var lookupCellNib: UINib {
-        return UINib(nibName: "LookupDefaultCell", bundle: Bundle(for: LookupDefaultCell.self))
-    }
-    
-    public func setup(with item: LookupItem) {
+    public func setup<T: LookupItem>(with item: T) {
         titleLabel?.text = item.lookupItemTitle
     }
     

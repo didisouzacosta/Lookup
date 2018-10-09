@@ -11,22 +11,20 @@ import UIKit
 
 public class LookupController<T: LookupItem>: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate {
     
+    public typealias LookupItemCell = LookupItemCellRepresentable & UITableViewCell
     public typealias SearchHandler = (_ search: LookupSearcheable, @escaping (_ result: LookupSearchResult<T>) -> Void) -> Void
     
     // MARK: - Public Variables
     
-    public var didSelectedItemHandler: ((T) -> Void)?
+    public var didSelectItemHandler: ((T) -> Void)?
+    public var cellForRowHandler: ((IndexPath) -> String)?
+    
     public var hidesSearchBarWhenScrolling: Bool = false
     public var obscuresBackgroundDuringPresentation: Bool = false
     
     public var searcheable: Bool {
         get { return viewModel.searcheable }
         set { viewModel.searcheable = newValue }
-    }
-    
-    public var offsetFromLoad: Int {
-        get { return viewModel.offsetFromLoad }
-        set { viewModel.offsetFromLoad = newValue }
     }
     
     // MARK: - Private Variables
@@ -75,7 +73,7 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
         super.viewDidLoad()
         setupTableView()
         setupSearch()
-        viewModel.load(page: 1)
+        viewModel.fetch()
     }
     
     // MARK: - Public Methods
@@ -89,29 +87,41 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: LookupDefaultCell.lookupCellIdentifier, for: indexPath) as! LookupDefaultCell
+        guard let cell = viewModel.registeredCells.compactMap({ identifier -> LookupItemCell? in
+            return tableView.dequeueReusableCell(withIdentifier: identifier.lookupItemIdentifier, for: indexPath) as? LookupItemCell
+        }).first else {
+            fatalError("Célula não registrada.")
+        }
+        
         cell.setup(with: viewModel.item(for: indexPath))
         return cell
     }
     
     public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        didSelectedItemHandler?(viewModel.item(for: indexPath))
+        didSelectItemHandler?(viewModel.item(for: indexPath))
     }
     
     public func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
-        viewModel.search(with: searchBar.text ?? "", scopeIndex: searchBar.selectedScopeButtonIndex)
+        viewModel.fetch(term: searchBar.text ?? "", scopeIndex: searchBar.selectedScopeButtonIndex)
     }
     
     public func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        viewModel.search(with: searchBar.text ?? "", scopeIndex: selectedScope)
+        viewModel.fetch(term: searchBar.text ?? "", scopeIndex: selectedScope)
+    }
+    
+    public func register(cells: [LookupItemIdentifiable]) {
+        viewModel.registeredCells += cells
+        viewModel.registeredCells.forEach { [weak self] item in
+            self?.tableView.register(item.lookupItemNib, forCellReuseIdentifier: item.lookupItemIdentifier)
+        }
     }
     
     // MARK: - Private Methods
     
     private func setupTableView() {
-        tableView.register(LookupDefaultCell.lookupCellNib, forCellReuseIdentifier: LookupDefaultCell.lookupCellIdentifier)
+        register(cells: [LookupItemDefaultIdentifier<T>()])
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
     }

@@ -34,7 +34,7 @@
             </tableViewCellContentView>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
-                <outlet property="titleLabel" destination="2il-pl-Hft" id="PQC-uW-BS4"/>
+                <outlet property="titleLabel" destination="2il-pl-Hft" id="qwj-Lx-UBc"/>
             </connections>
             <point key="canvasLocation" x="9" y="78"/>
         </tableViewCell>
