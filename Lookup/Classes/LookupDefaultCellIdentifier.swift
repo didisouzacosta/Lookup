@@ -17,4 +17,8 @@ class LookupDefaultCellIdentifier: LookupItemIdentifiable {
         return "LookupDefaultCell"
     }
     
+    var bundle: Bundle {
+        return Bundle(for: LookupDefaultCell.self)
+    }
+    
 }

@@ -14,7 +14,7 @@ public struct LookupCellIdentifier: LookupItemIdentifiable {
     public var nibName: String
     public var bundle: Bundle
     
-    public init(identifier: String, nibName: String? = nil, bundle: Bundle = Bundle.main) {
+    public init(_ identifier: String, nibName: String? = nil, bundle: Bundle = Bundle.main) {
         self.identifier = identifier
         self.nibName = nibName ?? identifier
         self.bundle = bundle

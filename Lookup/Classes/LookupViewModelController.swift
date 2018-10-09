@@ -34,6 +34,10 @@ final class LookupViewModelController<T: LookupItem> {
         return items.value.count
     }
     
+    var defaultIdentifier: LookupItemIdentifiable {
+        return LookupDefaultCellIdentifier()
+    }
+    
     // MARK: - Private Variables
     
     private var searchHandler: SearchHandler

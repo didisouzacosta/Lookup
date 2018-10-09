@@ -17,6 +17,7 @@
 		A913F7F6216391CB00CA90DD /* Lookup_ExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A913F7F5216391CB00CA90DD /* Lookup_ExampleTests.swift */; };
 		A94BFC19216C38AC0066BFC6 /* TestCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94BFC18216C38AC0066BFC6 /* TestCell.xib */; };
 		A94BFC1B216C38F60066BFC6 /* TestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94BFC1A216C38F60066BFC6 /* TestCell.swift */; };
+		A94BFC1F216C4D620066BFC6 /* Test2Cell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94BFC1E216C4D620066BFC6 /* Test2Cell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		A913F7F7216391CB00CA90DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A94BFC18216C38AC0066BFC6 /* TestCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestCell.xib; sourceTree = "<group>"; };
 		A94BFC1A216C38F60066BFC6 /* TestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCell.swift; sourceTree = "<group>"; };
+		A94BFC1E216C4D620066BFC6 /* Test2Cell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Test2Cell.xib; sourceTree = "<group>"; };
 		B2B8E94B9131B45853D834F8 /* Pods-Lookup_ExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lookup_ExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Lookup_ExampleTests/Pods-Lookup_ExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		CE6A17B070C42A4B918F0ADB /* Pods_Lookup_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Lookup_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA330F4C4FA154E0CD8DC499 /* Pods_Lookup_ExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Lookup_ExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,6 +120,7 @@
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 				A94BFC18216C38AC0066BFC6 /* TestCell.xib */,
 				A94BFC1A216C38F60066BFC6 /* TestCell.swift */,
+				A94BFC1E216C4D620066BFC6 /* Test2Cell.xib */,
 			);
 			name = "Example for Lookup";
 			path = Lookup;
@@ -258,6 +261,7 @@
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				A94BFC19216C38AC0066BFC6 /* TestCell.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				A94BFC1F216C4D620066BFC6 /* Test2Cell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
