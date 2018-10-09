@@ -22,8 +22,6 @@ final class LookupViewModelController<T: LookupItem> {
     private(set) var isLoading: Dynamic<Bool> = Dynamic<Bool>(false)
     private(set) var error: Dynamic<Error?> = Dynamic<Error?>(nil)
     
-    var registeredCells: [LookupItemIdentifiable] = []
-    
     var offset: Int {
         return lookupSearch.offset
     }

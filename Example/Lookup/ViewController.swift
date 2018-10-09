@@ -18,6 +18,9 @@ class ViewController: UIViewController {
             let filtered = !search.term.isEmpty ? results.filter { $0.lowercased().contains(search.term.lowercased()) } : results
             searchResult(.success(filtered))
         }
+        lookup.cellIdentifierForRowHandler = { indexPath, item in
+            return .custom(LookupCellIdentifier(identifier: "TestCell"))
+        }
         lookup.didSelectItemHandler = { item in
             print(item)
         }

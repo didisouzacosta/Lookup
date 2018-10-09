@@ -8,6 +8,19 @@
 import Foundation
 
 public protocol LookupItemIdentifiable {
-    var lookupItemIdentifier: String { get }
-    var lookupItemNib: UINib { get }
+    var identifier: String { get }
+    var nibName: String { get }
+    var bundle: Bundle { get }
+}
+
+extension LookupItemIdentifiable {
+    
+    public var bundle: Bundle {
+        return Bundle.main
+    }
+    
+    var nib: UINib {
+        return UINib(nibName: nibName, bundle: bundle)
+    }
+    
 }

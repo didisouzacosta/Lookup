@@ -17,7 +17,7 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     // MARK: - Public Variables
     
     public var didSelectItemHandler: ((T) -> Void)?
-    public var cellForRowHandler: ((IndexPath) -> String)?
+    public var cellIdentifierForRowHandler: ((T, IndexPath) -> ItemIdentifierCellType)?
     
     public var hidesSearchBarWhenScrolling: Bool = false
     public var obscuresBackgroundDuringPresentation: Bool = false
@@ -87,9 +87,21 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = viewModel.registeredCells.compactMap({ identifier -> LookupItemCell? in
-            return tableView.dequeueReusableCell(withIdentifier: identifier.lookupItemIdentifier, for: indexPath) as? LookupItemCell
-        }).first else {
+        let item = viewModel.item(for: indexPath)
+        var itemIdentifier: LookupItemIdentifiable = LookupDefaultCellIdentifier()
+        
+        if let itemType = cellIdentifierForRowHandler?(item, indexPath) {
+            switch itemType {
+            case .custom(let item):
+                itemIdentifier = item
+            default:
+                break
+            }
+        }
+        
+        tableView.register(itemIdentifier.nib, forCellReuseIdentifier: itemIdentifier.identifier)
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: itemIdentifier.identifier, for: indexPath) as? LookupItemCell else {
             fatalError("Célula não registrada.")
         }
         
@@ -111,17 +123,9 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
         viewModel.fetch(term: searchBar.text ?? "", scopeIndex: selectedScope)
     }
     
-    public func register(cells: [LookupItemIdentifiable]) {
-        viewModel.registeredCells += cells
-        viewModel.registeredCells.forEach { [weak self] item in
-            self?.tableView.register(item.lookupItemNib, forCellReuseIdentifier: item.lookupItemIdentifier)
-        }
-    }
-    
     // MARK: - Private Methods
     
     private func setupTableView() {
-        register(cells: [LookupItemDefaultIdentifier<T>()])
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
     }
