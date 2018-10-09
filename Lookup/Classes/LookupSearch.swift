@@ -16,11 +16,12 @@ public struct LookupSearch: LookupSearcheable {
     public var scopes: [String] = []
     public var selectedScope: Int?
     public var placeholder: String?
-    public var offset: Int = 10
+    public var offset: Int
+    public var searcheable: Bool
     
     // MARK: - Life Cycle
     
-    public init(page: Int = 1, limit: Int = 30, term: String = "", scopes: [String] = [], selectedScope: Int? = nil, placeholder: String? = nil, offset: Int = 10) {
+    public init(page: Int = 1, limit: Int = 30, term: String = "", scopes: [String] = [], selectedScope: Int? = nil, placeholder: String? = nil, offset: Int = 10, searcheable: Bool = true) {
         self.page = page
         self.limit = limit
         self.term = term
@@ -28,6 +29,7 @@ public struct LookupSearch: LookupSearcheable {
         self.selectedScope = selectedScope
         self.placeholder = placeholder
         self.offset = offset
+        self.searcheable = searcheable
     }
     
 }

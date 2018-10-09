@@ -22,11 +22,6 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     public var hidesSearchBarWhenScrolling: Bool = false
     public var obscuresBackgroundDuringPresentation: Bool = false
     
-    public var searcheable: Bool {
-        get { return viewModel.searcheable }
-        set { viewModel.searcheable = newValue }
-    }
-    
     // MARK: - Private Variables
     
     private var lookupSearch: LookupSearcheable!
@@ -120,6 +115,8 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     }
     
     private func setupSearch() {
+        guard viewModel.lookupSearch.searcheable else { return }
+        
         if #available(iOS 11.0, *) {
             if navigationController?.navigationItem != nil {
                 navigationItem.searchController = searchController

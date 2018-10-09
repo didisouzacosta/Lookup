@@ -15,6 +15,7 @@ public protocol LookupSearcheable {
     var selectedScope: Int? { get set }
     var placeholder: String? { get }
     var offset: Int { get }
+    var searcheable: Bool { get }
     
 }
 
@@ -34,6 +35,10 @@ extension LookupSearcheable {
     
     var offset: Int {
         return 10
+    }
+    
+    var searcheable: Bool {
+        return true
     }
     
 }

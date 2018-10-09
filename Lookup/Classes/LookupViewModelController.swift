@@ -14,10 +14,7 @@ final class LookupViewModelController<T: LookupItem> {
     
     // MARK: - Public Variables
     
-    public var searcheable: Bool = true
-    
     private(set) var lookupSearch: LookupSearcheable
-    
     private(set) var items: Dynamic<[T]> = Dynamic<[T]>([])
     private(set) var isLoading: Dynamic<Bool> = Dynamic<Bool>(false)
     private(set) var error: Dynamic<Error?> = Dynamic<Error?>(nil)
