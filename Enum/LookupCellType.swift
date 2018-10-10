@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum ItemIdentifierCellType {
-    case custom(LookupCellIdentifiable)
+public enum LookupCellType {
+    case custom(LookupIdentifiable)
     case `default`
 }

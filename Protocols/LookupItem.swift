@@ -9,11 +9,3 @@
 public protocol LookupItem {
     var lookupItemTitle: String? { get }
 }
-
-extension String: LookupItem {
-    
-    public var lookupItemTitle: String? {
-        return self
-    }
-    
-}

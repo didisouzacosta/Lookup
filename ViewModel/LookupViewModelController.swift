@@ -11,8 +11,11 @@ import Foundation
 final class LookupViewModelController<T: LookupItem> {
     
     typealias SearchHandler = (_ search: LookupSearcheable, @escaping (_ dataSource: LookupSearchResult<T>) -> Void) -> Void
+    typealias IdentifierHandler = (IndexPath, T) -> LookupCellType
     
     // MARK: - Public Variables
+    
+    var identifierHandler: IdentifierHandler?
     
     private(set) var lookupSearch: LookupSearcheable
     private(set) var items: Dynamic<[T]> = Dynamic<[T]>([])
@@ -31,13 +34,14 @@ final class LookupViewModelController<T: LookupItem> {
         return items.value.count
     }
     
-    var defaultIdentifier: LookupCellIdentifiable {
-        return LookupDefaultCellIdentifier()
+    var defaultIdentifier: LookupIdentifiable {
+        return LookupDefaultIdentifier()
     }
     
     // MARK: - Private Variables
     
     private var searchHandler: SearchHandler
+    private var identifiers: [LookupIdentifiable] = []
     
     private var currentPage: Int = 0 {
         didSet { lookupSearch.page = currentPage }
@@ -63,7 +67,29 @@ final class LookupViewModelController<T: LookupItem> {
         return items.value[indexPath.row]
     }
     
+    func identifier(with tableView: UITableView, at indexPath: IndexPath) -> LookupIdentifiable {
+        guard let itemType = identifierHandler?(indexPath, item(for: indexPath)) else {
+            return defaultIdentifier
+        }
+        
+        switch itemType {
+        case .custom(let identifier):
+            if register(identifier: identifier) {
+                tableView.register(identifier.nib, forCellReuseIdentifier: identifier.reuseIdentifier)
+            }
+            return identifier
+        default:
+            return defaultIdentifier
+        }
+    }
+    
     // MARK: - Private Methods
+    
+    private func register(identifier: LookupIdentifiable) -> Bool {
+        guard !identifiers.contains(where: { return $0.reuseIdentifier == identifier.reuseIdentifier }) else { return false }
+        identifiers.append(identifier)
+        return true
+    }
     
     private func fetch() {
         let currentPage = lookupSearch.page

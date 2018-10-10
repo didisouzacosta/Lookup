@@ -7,7 +7,6 @@
 //
 
 public protocol LookupSearcheable {
-    
     var page: Int { get set }
     var limit: Int { get set }
     var term: String { get set }
@@ -16,7 +15,6 @@ public protocol LookupSearcheable {
     var placeholder: String? { get }
     var offset: Int { get }
     var searcheable: Bool { get }
-    
 }
 
 extension LookupSearcheable {
