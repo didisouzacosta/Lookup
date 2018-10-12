@@ -13,4 +13,10 @@ extension String: LookupItem {
         return self
     }
     
+    public var editActions: [LookupEditActionRepresentable] {
+        return [
+            LookupEditAction(title: "Teste", style: .default) { print("Aeeee") }
+        ]
+    }
+    
 }

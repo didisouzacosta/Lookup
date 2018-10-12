@@ -11,7 +11,7 @@ import Foundation
 final class LookupViewModelController<T: LookupItem> {
     
     typealias SearchHandler = (_ search: LookupSearcheable, @escaping (_ dataSource: LookupSearchResult<T>) -> Void) -> Void
-    typealias IdentifierHandler = (IndexPath, T) -> LookupCellType
+    typealias IdentifierHandler = (T, IndexPath) -> LookupCellType
     
     // MARK: - Public Variables
     
@@ -68,7 +68,7 @@ final class LookupViewModelController<T: LookupItem> {
     }
     
     func identifier(with tableView: UITableView, at indexPath: IndexPath) -> LookupIdentifiable {
-        guard let itemType = identifierHandler?(indexPath, item(for: indexPath)) else {
+        guard let itemType = identifierHandler?(item(for: indexPath), indexPath) else {
             return defaultIdentifier
         }
         
@@ -83,13 +83,13 @@ final class LookupViewModelController<T: LookupItem> {
         }
     }
     
-    // MARK: - Private Methods
-    
-    private func register(identifier: LookupIdentifiable) -> Bool {
+    func register(identifier: LookupIdentifiable) -> Bool {
         guard !identifiers.contains(where: { return $0.reuseIdentifier == identifier.reuseIdentifier }) else { return false }
         identifiers.append(identifier)
         return true
     }
+    
+    // MARK: - Private Methods
     
     private func fetch() {
         let currentPage = lookupSearch.page

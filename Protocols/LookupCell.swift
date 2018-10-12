@@ -7,6 +7,8 @@
 
 import Foundation
 
+
+
 public protocol LookupCell {
     static var reuseIdentifier: String { get }
     func setup<T: LookupItem>(with item: T)

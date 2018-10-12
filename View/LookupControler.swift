@@ -13,7 +13,7 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     
     public typealias LookupCellRepresentable = LookupCell & UITableViewCell
     public typealias SearchHandler = (_ search: LookupSearcheable, @escaping (_ dataSource: LookupSearchResult<T>) -> Void) -> Void
-    public typealias IdentifierHandler = (IndexPath, T) -> LookupCellType
+    public typealias IdentifierHandler = (T, IndexPath) -> LookupCellType
     
     // MARK: - Public Variables
     
@@ -84,6 +84,10 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfRows
+    }
+    
+    public override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        return viewModel.item(for: indexPath).editActions.map { $0.rowAction }
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

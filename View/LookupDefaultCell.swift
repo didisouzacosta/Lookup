@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 public class LookupDefaultCell: UITableViewCell, LookupCell {
-    
     @IBOutlet private var titleLabel: UILabel?
     
     public static var reuseIdentifier: String {
