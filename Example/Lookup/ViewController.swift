@@ -17,13 +17,17 @@ class ViewController: UIViewController {
             let filtered = !search.term.isEmpty ? results.filter { $0.lowercased().contains(search.term.lowercased()) } : results
             dataSource(.success(filtered))
         }
-        lookup.identifierHandler = { item, indexPath in
-            if (indexPath.row % 3) == 0 {
-                return .custom(TestCell.reuseIdentifier)
-            } else {
-                return .default
-            }
+        lookup.organizedItemsHandler = { _, _ in
+            return .alphabetic
         }
+//        lookup.customIdentifierForRowHandler = { item, indexPath in
+//            if (indexPath.row % 3) == 0 {
+//                return .custom(TestCell.reuseIdentifier)
+//            } else {
+//                return .default
+//            }
+//            return .custom(TestCell.reuseIdentifier)
+//        }
         lookup.didSelectItemHandler = { item in
             print(item)
         }

@@ -13,15 +13,23 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     
     public typealias LookupCellRepresentable = LookupCell & UITableViewCell
     public typealias SearchHandler = (_ search: LookupSearcheable, @escaping (_ dataSource: LookupSearchResult<T>) -> Void) -> Void
-    public typealias IdentifierHandler = (T, IndexPath) -> LookupCellType
+    public typealias IdentifierForRowHandler = (T, IndexPath) -> LookupCellType
     
     // MARK: - Public Variables
     
-    public var didSelectItemHandler: ((T) -> Void)?
+    public var didSelectItemHandler: ((T) -> Void)? {
+        get { return viewModel.didSelectItemHandler }
+        set { viewModel.didSelectItemHandler = newValue }
+    }
     
-    public var identifierHandler: IdentifierHandler? {
-        get { return viewModel.identifierHandler }
-        set { viewModel.identifierHandler = newValue }
+    public var organizedItemsHandler: (([T], LookupSearcheable) -> LookupSessionOrganizer<T>)? {
+        get { return viewModel.organizedItemsHandler }
+        set { viewModel.organizedItemsHandler = newValue }
+    }
+    
+    public var customIdentifierForRowHandler: IdentifierForRowHandler? {
+        get { return viewModel.customIdentifierForRowHandler }
+        set { viewModel.customIdentifierForRowHandler = newValue }
     }
     
     public var hidesSearchBarWhenScrolling: Bool = false
@@ -45,7 +53,7 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     
     private lazy var viewModel: LookupViewModelController<T> = {
         let viewModel = LookupViewModelController<T>(lookupSearch: lookupSearch, searchHandler: searchHandler)
-        viewModel.items.bind() { [weak self] _ in
+        viewModel.updatedContentHandler = { [weak self] in
             self?.tableView.reloadData()
         }
         viewModel.isLoading.bind() { [weak self] isLoading in
@@ -59,10 +67,11 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     
     // MARK: - Life Cycle
     
-    public init(style: UITableView.Style = .plain, lookupSearch: LookupSearcheable = LookupSearch(), searchHandler: @escaping SearchHandler) {
+    public init(style: UITableView.Style = .plain, title: String? = nil, lookupSearch: LookupSearcheable = LookupSearch(), searchHandler: @escaping SearchHandler) {
         super.init(style: style)
         self.lookupSearch = lookupSearch
         self.searchHandler = searchHandler
+        self.title = title
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -83,7 +92,7 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     }
     
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.numberOfRows
+        return viewModel.numberOfRows(at: section)
     }
     
     public override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -96,6 +105,14 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
         guard let cell = reusable as? LookupCellRepresentable else { fatalError() }
         cell.setup(with: viewModel.item(for: indexPath))
         return cell
+    }
+    
+    public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return viewModel.headerTitle(for: section)
+    }
+    
+    public override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return viewModel.footerTitle(for: section)
     }
     
     public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -118,6 +135,7 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
         tableView.register(viewModel.defaultIdentifier.nib, forCellReuseIdentifier: viewModel.defaultIdentifier.reuseIdentifier)
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.tableFooterView = viewModel.footerView
     }
     
     private func setupSearch() {
