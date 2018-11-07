@@ -7,14 +7,8 @@
 //
 
 public protocol LookupItem {
-    var editActions: [LookupEditActionRepresentable] { get }
+    var lookupItemLabel: String? { get }
     var lookupItemTitle: String? { get }
-}
-
-extension LookupItem {
-    
-    public var editActions: [LookupEditActionRepresentable] {
-        return []
-    }
-    
+    var lookupItemDescription: String? { get }
+    var lookupItemImage: UIImage? { get }
 }

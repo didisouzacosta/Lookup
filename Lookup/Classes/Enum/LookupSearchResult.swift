@@ -9,5 +9,5 @@ import Foundation
 
 public enum LookupSearchResult<T: LookupItem> {
     case success([T])
-    case failure(Error)
+    case failure(Error?)
 }

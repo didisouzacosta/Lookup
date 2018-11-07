@@ -108,7 +108,7 @@ final class LookupViewModelController<T: LookupItem> {
         lookupSearch.page = page
         lookupSearch.term = term
         lookupSearch.selectedScope = scopeIndex
-        fetch()
+        loadData()
     }
     
     func item(for indexPath: IndexPath) -> T {
@@ -125,6 +125,11 @@ final class LookupViewModelController<T: LookupItem> {
     
     func numberOfRows(at section: Int) -> Int {
         return organizedItems[section].items.count
+    }
+    
+    func reloadData() {
+        lookupSearch.page = 1
+        loadData()
     }
     
     func identifier(with tableView: UITableView, at indexPath: IndexPath) -> LookupIdentifiable {
@@ -151,7 +156,7 @@ final class LookupViewModelController<T: LookupItem> {
     
     // MARK: - Private Methods
     
-    private func fetch() {
+    private func loadData() {
         let currentPage = lookupSearch.page
         let currentTerm = lookupSearch.term
         let currentScope = lookupSearch.selectedScope

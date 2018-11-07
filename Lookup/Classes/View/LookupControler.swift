@@ -14,6 +14,7 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     public typealias LookupCellRepresentable = LookupCell & UITableViewCell
     public typealias SearchHandler = (_ search: LookupSearcheable, @escaping (_ dataSource: LookupSearchResult<T>) -> Void) -> Void
     public typealias IdentifierForRowHandler = (T, IndexPath) -> LookupCellType
+    public typealias EditActionsHandler = (T, IndexPath) -> [LookupEditActionRepresentable]
     
     // MARK: - Public Variables
     
@@ -32,8 +33,10 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
         set { viewModel.customIdentifierForRowHandler = newValue }
     }
     
+    public var editActionsHandler: EditActionsHandler?
     public var hidesSearchBarWhenScrolling: Bool = false
     public var obscuresBackgroundDuringPresentation: Bool = false
+    public var hidesNavigationBarDuringPresentation: Bool = false
     
     // MARK: - Private Variables
     
@@ -44,10 +47,15 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = obscuresBackgroundDuringPresentation
-        searchController.searchBar.placeholder = viewModel.lookupSearch.placeholder
-        searchController.searchBar.scopeButtonTitles = viewModel.lookupSearch.scopes
-        searchController.searchBar.selectedScopeButtonIndex = viewModel.lookupSearch.selectedScope ?? 0
-        searchController.searchBar.delegate = self
+        searchController.hidesNavigationBarDuringPresentation = hidesNavigationBarDuringPresentation
+        
+        var searchBar = searchController.searchBar
+        searchBar.placeholder = viewModel.lookupSearch.placeholder
+        searchBar.scopeButtonTitles = viewModel.lookupSearch.scopes
+        searchBar.selectedScopeButtonIndex = viewModel.lookupSearch.selectedScope ?? 0
+        searchBar.delegate = self
+        searchBar.sizeToFit()
+        
         return searchController
     }()
     
@@ -96,7 +104,11 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     }
     
     public override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        return viewModel.item(for: indexPath).editActions.map { $0.rowAction }
+        return (editActionsHandler?(viewModel.item(for: indexPath), indexPath) ?? []).map { $0.rowAction }
+    }
+    
+    public func reloadData() {
+        viewModel.reloadData()
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -134,24 +146,24 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     private func setupTableView() {
         tableView.register(viewModel.defaultIdentifier.nib, forCellReuseIdentifier: viewModel.defaultIdentifier.reuseIdentifier)
         tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableView.automaticDimension
+        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.tableFooterView = viewModel.footerView
     }
     
     private func setupSearch() {
         guard viewModel.lookupSearch.searcheable else { return }
-        
-        if #available(iOS 11.0, *) {
-            if navigationController?.navigationItem != nil {
-                navigationItem.searchController = searchController
-                navigationItem.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
-                definesPresentationContext = true
-            } else {
-                tableView.tableHeaderView = searchController.searchBar
-            }
-        } else {
-            tableView.tableHeaderView = searchController.searchBar
-        }
+        tableView.tableHeaderView = searchController.searchBar
+//        if #available(iOS 11.0, *) {
+//            if navigationController?.navigationItem != nil {
+//                navigationItem.searchController = searchController
+//                navigationItem.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
+////                definesPresentationContext = true
+//            } else {
+//                tableView.tableHeaderView = searchController.searchBar
+//            }
+//        } else {
+//            tableView.tableHeaderView = searchController.searchBar
+//        }
     }
     
 }
