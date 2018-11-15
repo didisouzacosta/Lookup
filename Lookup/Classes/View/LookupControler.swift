@@ -15,6 +15,7 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     public typealias SearchHandler = (_ search: LookupSearcheable, @escaping (_ dataSource: LookupSearchResult<T>) -> Void) -> Void
     public typealias IdentifierForRowHandler = (T, IndexPath) -> LookupCellType
     public typealias EditActionsHandler = (T, IndexPath) -> [LookupEditActionRepresentable]
+    public typealias AcessoryTypeHandler = (T, IndexPath) -> UITableViewCellAccessoryType
     
     // MARK: - Public Variables
     
@@ -33,6 +34,8 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
         set { viewModel.customIdentifierForRowHandler = newValue }
     }
     
+    public var selectedItem: T?
+    public var acessoryTypeHandler: AcessoryTypeHandler?
     public var editActionsHandler: EditActionsHandler?
     public var hidesSearchBarWhenScrolling: Bool = false
     public var obscuresBackgroundDuringPresentation: Bool = false
@@ -80,6 +83,7 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
         self.lookupSearch = lookupSearch
         self.searchHandler = searchHandler
         self.title = title
+        self.searchController.searchBar.setValue("Cancelar", forKey:"_cancelButtonText")
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -91,6 +95,11 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
         setupTableView()
         setupSearch()
         viewModel.fetch()
+    }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        searchController.isActive = false
     }
     
     // MARK: - Public Methods
@@ -115,7 +124,9 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
         let identifier = viewModel.identifier(with: tableView, at: indexPath)
         let reusable = tableView.dequeueReusableCell(withIdentifier: identifier.reuseIdentifier, for: indexPath)
         guard let cell = reusable as? LookupCellRepresentable else { fatalError() }
-        cell.setup(with: viewModel.item(for: indexPath))
+        let item = viewModel.item(for: indexPath)
+        cell.accessoryType = item.lookupItemIgnoreAcessory ? .none : selectedItem == item ? .checkmark : acessoryTypeHandler?(item, indexPath) ?? .none
+        cell.setup(with: item)
         return cell
     }
     
@@ -139,6 +150,11 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     
     public func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         viewModel.fetch(term: searchBar.text ?? "", scopeIndex: selectedScope)
+    }
+    
+    private func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        let button = searchBar.value(forKey: "cancelButton") as? UIButton
+        button?.setTitle("Cancelar", for: .normal)
     }
     
     // MARK: - Private Methods
