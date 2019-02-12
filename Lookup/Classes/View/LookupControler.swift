@@ -3,7 +3,6 @@
 //  Lookup
 //
 //  Created by Adriano Costa on 02/10/18.
-//  Copyright © 2018 Cleander. All rights reserved.
 //
 
 import Foundation
@@ -15,7 +14,7 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
     public typealias SearchHandler = (_ search: LookupSearcheable, @escaping (_ dataSource: LookupSearchResult<T>) -> Void) -> Void
     public typealias IdentifierForRowHandler = (T, IndexPath) -> LookupCellType
     public typealias EditActionsHandler = (T, IndexPath) -> [LookupEditActionRepresentable]
-    public typealias AcessoryTypeHandler = (T, IndexPath) -> UITableViewCellAccessoryType
+    public typealias AcessoryTypeHandler = (T, IndexPath) -> UITableViewCell.AccessoryType
     
     // MARK: - Public Variables
     
@@ -83,7 +82,6 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
         self.lookupSearch = lookupSearch
         self.searchHandler = searchHandler
         self.title = title
-        self.searchController.searchBar.setValue("Cancelar", forKey:"_cancelButtonText")
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -152,34 +150,30 @@ public class LookupController<T: LookupItem>: UITableViewController, UISearchRes
         viewModel.fetch(term: searchBar.text ?? "", scopeIndex: selectedScope)
     }
     
-    private func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        let button = searchBar.value(forKey: "cancelButton") as? UIButton
-        button?.setTitle("Cancelar", for: .normal)
-    }
-    
     // MARK: - Private Methods
     
     private func setupTableView() {
         tableView.register(viewModel.defaultIdentifier.nib, forCellReuseIdentifier: viewModel.defaultIdentifier.reuseIdentifier)
         tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.tableFooterView = viewModel.footerView
+        tableView.separatorInset = .zero
     }
     
     private func setupSearch() {
         guard viewModel.lookupSearch.searcheable else { return }
-        tableView.tableHeaderView = searchController.searchBar
-//        if #available(iOS 11.0, *) {
-//            if navigationController?.navigationItem != nil {
-//                navigationItem.searchController = searchController
-//                navigationItem.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
-////                definesPresentationContext = true
-//            } else {
-//                tableView.tableHeaderView = searchController.searchBar
-//            }
-//        } else {
-//            tableView.tableHeaderView = searchController.searchBar
-//        }
+        
+        if #available(iOS 11.0, *) {
+            if navigationController?.navigationItem != nil {
+                navigationItem.searchController = searchController
+                navigationItem.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
+                definesPresentationContext = true
+            } else {
+                tableView.tableHeaderView = searchController.searchBar
+            }
+        } else {
+            tableView.tableHeaderView = searchController.searchBar
+        }
     }
     
 }
